@@ -1,4 +1,4 @@
-## ================================
+# ================================
 # AI-BASED SAFETY SURVEILLANCE SYSTEM
 # COMPLETE BACKEND CODE
 # ================================
@@ -104,3 +104,36 @@ if __name__ == '__main__':
 # opencv-python
 # mysql-connector-python
 
+
+# ================================
+# FILE: backend/model.py
+# AI MODEL - YOLO OBJECT DETECTION
+# ================================
+
+from ultralytics import YOLO
+import cv2
+
+# Load trained model
+model = YOLO('best.pt')
+
+# Start live camera
+cap = cv2.VideoCapture(0)
+
+while True:
+    ret, frame = cap.read()
+    if not ret:
+        break
+
+    # Run detection
+    results = model(frame)
+
+    # Display detection output
+    annotated_frame = results[0].plot()
+    cv2.imshow('AI Safety Surveillance Detection', annotated_frame)
+
+    # Press q to quit
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
+
+cap.release()
+cv2.destroyAllWindows()
